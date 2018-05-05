@@ -1,0 +1,150 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'com.github.gfx.ribbonizer'
+
+apply plugin: 'io.fabric'
+
+android {
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
+    defaultConfig {
+        applicationId "com.tanavota.tanavota"
+        minSdkVersion 17
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary true
+
+        buildConfigField "String", "applicationIdForStore", "\"${applicationId}\""
+        // Play Store遷移時に Suffix なしの applictionId が必要なため追加します。
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+        ignore 'InvalidPackage'
+    }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:customtabs:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
+        transitive = true
+    }
+
+    testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+
+//    implementation 'com.google.firebase:firebase-messaging:11.6.2'
+
+    //retrofit
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+//    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.10.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+
+    implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+//    implementation 'com.joooonho:selectableroundedimageview:1.0.1'
+
+    // unit test
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.8.9'
+    testImplementation 'org.powermock:powermock-api-mockito2:1.7.1'
+    testImplementation 'org.powermock:powermock-module-junit4-legacy:1.7.1'
+    testImplementation 'org.powermock:powermock-core:1.7.1'
+    testImplementation('org.robolectric:robolectric:3.5.1') {
+        // conflicting 回避
+        // https://github.com/google/protobuf-gradle-plugin/issues/134
+        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+    }
+    testImplementation 'org.robolectric:shadows-support-v4:3.3.2'
+    testImplementation 'org.robolectric:shadows-multidex:3.5.1'
+    kapt 'com.android.databinding:compiler:3.1.0'
+
+    // orma
+    kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'
+    implementation 'com.github.gfx.android.orma:orma:4.2.5'
+
+    // crashlytics
+//    implementation('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
+//        transitive = true
+//    }
+
+    // aboutlibraries
+    implementation('com.mikepenz:aboutlibraries:5.9.6@aar') {
+        transitive = true
+    }
+
+    // epoxy
+    implementation 'com.airbnb.android:epoxy:2.9.0'
+    implementation 'com.airbnb.android:epoxy-databinding:2.9.0'
+    kapt 'com.airbnb.android:epoxy-processor:2.9.0'
+}
+
+
+kapt {
+    // for epoxy(https://github.com/airbnb/epoxy#kotlin)
+    correctErrorTypes = true
+}
+
+ribbonizer {
+    builder { variant, iconFile ->
+//        if (variant.name == "vul") {
+//            return yellowRibbonFilter(variant, iconFile)
+//        } else if (variant.name == "staging") {
+//            return greenRibbonFilter(variant, iconFile)
+//        } else {
+        return grayRibbonFilter(variant, iconFile)
+//        }
+    }
+}
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
