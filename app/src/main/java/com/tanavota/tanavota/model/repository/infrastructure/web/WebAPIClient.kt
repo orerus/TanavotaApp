@@ -1,6 +1,7 @@
 package com.tanavota.tanavota.model.repository.infrastructure.web
 
 import android.content.Context
+import com.google.gson.GsonBuilder
 import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.model.domain.Server
 import com.tanavota.tanavota.model.domain.environment.AppEnvironment
@@ -40,7 +41,7 @@ class WebAPIClient {
                               withChache: Boolean = false): Retrofit {
             val client = clientMap.getOrPut(Pair(format, withChache), {
                 build(wContext, when (format) {
-                    Format.JSON -> GsonConverterFactory.create()
+                    Format.JSON -> GsonConverterFactory.create(GsonBuilder().setLenient().create())
                 }, withChache)
             })
             return client

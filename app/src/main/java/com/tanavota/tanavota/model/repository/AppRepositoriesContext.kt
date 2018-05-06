@@ -1,8 +1,8 @@
 package com.tanavota.tanavota.model.repository
 
 import android.content.Context
+import com.tanavota.tanavota.model.domain.home.HomeWebAPI
 
 class AppRepositoriesContext(context: Context) : RepositoriesContext {
-    // TODO 実サーバーに置き換え
-    override val homeRepository = MockRepositoriesContext.mockHomeRepository()
+    override val homeRepository = HomeWebAPI(context)
 }

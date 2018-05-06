@@ -2,6 +2,7 @@ package com.tanavota.tanavota.model.domain.environment
 
 import android.content.Context
 import com.tanavota.tanavota.BuildConfig
+import com.tanavota.tanavota.model.domain.home.HomeWebAPI
 import com.tanavota.tanavota.model.repository.MockRepositoriesContext
 import java.util.*
 import java.util.concurrent.locks.ReentrantLock
@@ -19,7 +20,7 @@ object AppEnvironment {
             if (BuildConfig.BUILD_TYPE == "debug") {
                 stack.push(Environment(
                         repositoriesContext = MockRepositoriesContext(
-//                                homeRepo = HomeWebAPI()
+                                homeRepo = HomeWebAPI(context)
                         )
                 ))
             }

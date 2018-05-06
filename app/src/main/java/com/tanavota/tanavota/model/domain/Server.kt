@@ -11,8 +11,8 @@ enum class Server {
     }
 
     fun apiBaseUrl(): String = when (this) {
-        Debug -> "https://randomuser.me"
-        Prod -> "https://randomuser.me"
+        Debug -> "https://tanavota.com/api/"
+        Prod -> "https://tanavota.com/api/"
     }
 
     fun webBaseUrl(): String = when (this) {

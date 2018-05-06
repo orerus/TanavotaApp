@@ -2,23 +2,25 @@ package com.tanavota.tanavota.model.domain.home
 
 class ArticleThumbnail(
         val id: String,
-        val articleItem: String,
+        val article_item: String,
         val location: String,
-        val buildingStructure: String,
-        val timeOld: String,
+        val building_structure: String,
+        val time_old: String,
         val siteName: String,
         val imageUrl: String,
         val formatPrice: String,
         val formatYield: String
 ) {
+    val buildingDetail get() = "$building_structure / $time_old"
+
     companion object {
         fun empty(): ArticleThumbnail {
             return ArticleThumbnail(
                     id = "",
-                    articleItem = "",
+                    article_item = "",
                     location = "",
-                    buildingStructure = "",
-                    timeOld = "",
+                    building_structure = "",
+                    time_old = "",
                     siteName = "",
                     imageUrl = "",
                     formatYield = "",
