@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Tanavota</string>
+
+    <string name="network_error_title">ネットワークエラー</string>
+    <string name="network_error_description">時間を空けて再度アクセスしてください</string>
+
+    <string name="price">価格</string>
+    <string name="yield">利回り</string>
+
 </resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.tanavota.tanavota.viewmodel.common.InitialLoadingState" />
+
+        <variable
+            name="state"
+            type="com.tanavota.tanavota.viewmodel.common.InitialLoadingState" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/ltgray"
+            android:visibility="@{state == InitialLoadingState.Loading? View.VISIBLE : View.GONE}">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/ltgray"
+            android:visibility="@{state == InitialLoadingState.Error? View.VISIBLE : View.GONE }">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="100dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/network_error_title"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/network_error_description"
+                />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+</layout>

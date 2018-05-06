@@ -1,6 +1,6 @@
 package com.tanavota.tanavota.model.domain.home
 
 class Home(
-        totalCount: Int,
-        articleItems: List<ArticleThumbnail>
+        val totalCount: Int,
+        val articleItems: List<ArticleThumbnail>
 )
