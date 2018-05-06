@@ -47,6 +47,7 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
         val binding = FragmentHomeBinding.bind(view)
         binding.viewModel = viewModel
         binding.recyclerView.adapter = controller.adapter
+        binding.recyclerView.addOnScrollListener(viewModel.scrollListener)
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
         this.controller = controller
         this.binding = binding
@@ -66,6 +67,9 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
         controller.setData(viewModel)
     }
 
+    override fun onDataLoaded() {
+        controller.setData(viewModel)
+    }
     // end region
 
     companion object {

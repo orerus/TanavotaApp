@@ -7,6 +7,8 @@ import io.reactivex.Single
 interface HomeRepository {
     fun home(): Single<Home>
 
+    fun next(page: Int): Single<Home>
+
     companion object {
         fun instance(): HomeRepository {
             return AppEnvironment.current().repositoriesContext.homeRepository

@@ -6,6 +6,7 @@ import io.reactivex.Single
 import retrofit2.http.GET
 import java.lang.ref.WeakReference
 import android.content.Context
+import retrofit2.http.Query
 
 class HomeWebAPI(context: Context) : HomeRepository {
     val wContext = WeakReference(context)
@@ -13,6 +14,11 @@ class HomeWebAPI(context: Context) : HomeRepository {
     interface Request {
         @GET("index")
         fun getArticleThumbnails(): Single<Home>
+
+        @GET("index")
+        fun getNextArticleThumbnails(
+                @Query("page") page: Int
+        ): Single<Home>
     }
 
     override fun home(): Single<Home> {
@@ -21,4 +27,9 @@ class HomeWebAPI(context: Context) : HomeRepository {
                 .getArticleThumbnails()
     }
 
+    override fun next(page: Int): Single<Home> {
+        return WebAPIClient.getJsonClient(wContext)
+                .create(Request::class.java)
+                .getNextArticleThumbnails(page)
+    }
 }

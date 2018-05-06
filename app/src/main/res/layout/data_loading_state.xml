@@ -5,11 +5,15 @@
 
         <import type="android.view.View" />
 
-        <import type="com.tanavota.tanavota.viewmodel.common.InitialLoadingState" />
+        <import type="com.tanavota.tanavota.viewmodel.common.DataLoadingState" />
 
         <variable
             name="state"
-            type="com.tanavota.tanavota.viewmodel.common.InitialLoadingState" />
+            type="com.tanavota.tanavota.viewmodel.common.DataLoadingState" />
+
+        <variable
+            name="delegate"
+            type="com.tanavota.tanavota.viewmodel.common.DataLoadingState.Delegate" />
 
     </data>
 
@@ -20,8 +24,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:background="@color/ltgray"
-            android:visibility="@{state == InitialLoadingState.Loading? View.VISIBLE : View.GONE}">
+            android:visibility="@{state == DataLoadingState.Loading? View.VISIBLE : View.GONE}">
 
             <ProgressBar
                 android:layout_width="wrap_content"
@@ -35,14 +41,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/ltgray"
-            android:visibility="@{state == InitialLoadingState.Error? View.VISIBLE : View.GONE }">
+            android:visibility="@{state == DataLoadingState.Error? View.VISIBLE : View.GONE }">
 
             <TextView
                 android:id="@+id/network_error_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="20dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/network_error_title"
                 />
@@ -53,10 +59,20 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/network_error_title"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/network_error_description"
                 />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/network_error_description"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/retry"
+                android:onClick="@{()->delegate.onRetry()}"/>
 
         </RelativeLayout>
 
