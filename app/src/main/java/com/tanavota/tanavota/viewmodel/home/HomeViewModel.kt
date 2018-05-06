@@ -13,7 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.lang.ref.WeakReference
 
-class HomeViewModel(delegate: Delegate): HomeModel.Delegate {
+class HomeViewModel(delegate: Delegate): HomeModel.Delegate, HomeEpoxyModelable {
     interface Delegate {
         fun onInitialLoaded()
     }

@@ -1,12 +1,16 @@
 package com.tanavota.tanavota.view.home
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.tanavota.tanavota.R
 import com.tanavota.tanavota.databinding.FragmentHomeBinding
 import com.tanavota.tanavota.view.BaseFragment
+import com.tanavota.tanavota.view.home.epoxy.HomeEpoxyController
 import com.tanavota.tanavota.viewmodel.home.HomeViewModel
 
 /**
@@ -15,6 +19,7 @@ import com.tanavota.tanavota.viewmodel.home.HomeViewModel
 class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var controller: HomeEpoxyController
     private var shouldInitialLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +37,18 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val controller = HomeEpoxyController()
+        val dividerItemDecoration =
+                DividerItemDecoration(this.context, LinearLayoutManager(this.activity).orientation)
+        this.context
+                ?.let { ContextCompat.getDrawable(it, R.drawable.home_divider) }
+                ?.let { dividerItemDecoration.setDrawable(it) }
+
         val binding = FragmentHomeBinding.bind(view)
         binding.viewModel = viewModel
+        binding.recyclerView.adapter = controller.adapter
+        binding.recyclerView.addItemDecoration(dividerItemDecoration)
+        this.controller = controller
         this.binding = binding
     }
 
@@ -48,6 +63,7 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
     // region HomeViewModel.Delegate implementation
     override fun onInitialLoaded() {
         shouldInitialLoad = false
+        controller.setData(viewModel)
     }
 
     // end region
