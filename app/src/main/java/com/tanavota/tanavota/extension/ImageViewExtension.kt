@@ -8,5 +8,9 @@ import com.tanavota.tanavota.R
 
 @BindingAdapter("app:imageUrl")
 fun loadImage(view: ImageView, imageUrl: String) {
-    Picasso.with(view.context).load(imageUrl).error(R.drawable.no_image_dark).into(view)
+    if (imageUrl.isEmpty()) {
+        Picasso.with(view.context).load(R.drawable.no_image_dark).into(view)
+    } else {
+        Picasso.with(view.context).load(imageUrl).error(R.drawable.no_image_dark).into(view)
+    }
 }

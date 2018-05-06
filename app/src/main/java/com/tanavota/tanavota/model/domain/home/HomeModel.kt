@@ -8,8 +8,9 @@ import com.tanavota.tanavota.extension.subscribeOnIOThread
 import com.tanavota.tanavota.model.repository.home.HomeRepository
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
+import java.lang.ref.WeakReference
 
-class HomeModel {
+class HomeModel() {
     interface Delegate {
         fun onInitialLoaded()
         fun onInitialLoadingError()
