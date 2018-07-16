@@ -10,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
-class HomeModel() {
+open class HomeModel() {
     interface Delegate {
         fun onInitialLoaded()
         fun onInitialLoadingError()
@@ -18,18 +18,18 @@ class HomeModel() {
         fun onNextLoadingError()
     }
 
-    private val disposables: CompositeDisposable = CompositeDisposable()
-    val initialLoadingRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
-    val initialLoadingErrorRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
-    val nextLoadingRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
-    val nextLoadingErrorRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
-    val articleThumbnailList = mutableListOf<ArticleThumbnail>()
-    val lastLoadedArticleThumbnailList = mutableListOf<ArticleThumbnail>()
-    var totalCount = 0
-    var page = 1 // Fragmentを復元する場合は保持するように変更すること
-    val hasNext get() = articleThumbnailList.count() < totalCount
+    protected val disposables: CompositeDisposable = CompositeDisposable()
+    open val initialLoadingRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
+    open val initialLoadingErrorRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
+    open val nextLoadingRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
+    open val nextLoadingErrorRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
+    open val articleThumbnailList = mutableListOf<ArticleThumbnail>()
+    open val lastLoadedArticleThumbnailList = mutableListOf<ArticleThumbnail>()
+    open var totalCount = 0
+    open var page = 1 // Fragmentを復元する場合は保持するように変更すること
+    open val hasNext get() = articleThumbnailList.count() < totalCount
 
-    fun subscribe(delegate: Delegate): CompositeDisposable {
+    open fun subscribe(delegate: Delegate): CompositeDisposable {
         return CompositeDisposable().apply {
             add(initialLoadingRelay.subscribe { delegate.onInitialLoaded() })
             add(initialLoadingErrorRelay.subscribe { delegate.onInitialLoadingError() })
@@ -38,7 +38,7 @@ class HomeModel() {
         }
     }
 
-    fun loadInitial() {
+    open fun loadInitial() {
         HomeRepository.instance().home()
                 .subscribeOnIOThread()
                 .observeOnMainThread()
@@ -55,7 +55,7 @@ class HomeModel() {
                 .run { disposables.add(this) }
     }
 
-    fun loadNext() {
+    open fun loadNext() {
         if (hasNext) {
             HomeRepository.instance().next(page)
                     .subscribeOnIOThread()

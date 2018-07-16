@@ -8,7 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.tanavota.tanavota.R
+import com.tanavota.tanavota.TanavotaApplication
 import com.tanavota.tanavota.databinding.FragmentHomeBinding
+import com.tanavota.tanavota.di.component.ActivityComponent
+import com.tanavota.tanavota.di.component.DaggerApplicationComponent
+import com.tanavota.tanavota.di.module.ActivityModule
+import com.tanavota.tanavota.di.module.ApplicationModule
 import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.home.epoxy.HomeEpoxyController
 import com.tanavota.tanavota.viewmodel.home.HomeViewModel
@@ -25,7 +30,7 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = HomeViewModel(this)
+        viewModel = HomeViewModel(this.mComponent, this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

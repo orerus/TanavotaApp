@@ -2,21 +2,20 @@ package com.tanavota.tanavota.viewmodel.home
 
 import android.databinding.ObservableField
 import android.support.v7.widget.RecyclerView
+import com.tanavota.tanavota.di.component.ActivityComponent
+import com.tanavota.tanavota.di.component.DaggerApplicationComponent
 import com.tanavota.tanavota.extension.exchange
 import com.tanavota.tanavota.extension.getNullable
-import com.tanavota.tanavota.extension.observeOnMainThread
-import com.tanavota.tanavota.extension.subscribeOnIOThread
 import com.tanavota.tanavota.model.domain.home.ArticleThumbnail
 import com.tanavota.tanavota.model.domain.home.HomeModel
-import com.tanavota.tanavota.model.repository.home.HomeRepository
 import com.tanavota.tanavota.util.RecyclerViewScrollListenerDelegate
 import com.tanavota.tanavota.viewmodel.common.DataLoadingState
 import com.tanavota.tanavota.viewmodel.common.InitialLoadingState
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 
-class HomeViewModel(delegate: Delegate):
+
+class HomeViewModel(component: ActivityComponent, delegate: Delegate):
         HomeModel.Delegate, HomeEpoxyModelable, DataLoadingState.Delegate {
     interface Delegate {
         fun onInitialLoaded()
@@ -24,13 +23,14 @@ class HomeViewModel(delegate: Delegate):
     }
 
     private val wDelegate = WeakReference(delegate)
-    private val model = HomeModel()
+    @Inject lateinit var model: HomeModel
     val initialLoadingState = ObservableField<InitialLoadingState>(InitialLoadingState.Loading)
     val loadingState = ObservableField<DataLoadingState>(DataLoadingState.Completed)
     val articleThumbnailList = mutableListOf<ArticleThumbnail>()
     val scrollListener = ScrollListener()
 
     init {
+        component.inject(this)
         model.subscribe(this)
     }
 
