@@ -1,6 +1,7 @@
 package com.tanavota.tanavota.view.home
 
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -15,13 +16,15 @@ import com.tanavota.tanavota.di.component.DaggerApplicationComponent
 import com.tanavota.tanavota.di.module.ActivityModule
 import com.tanavota.tanavota.di.module.ApplicationModule
 import com.tanavota.tanavota.view.BaseFragment
+import com.tanavota.tanavota.view.Navigator
+import com.tanavota.tanavota.view.articledetail.ArticleDetailFragment
 import com.tanavota.tanavota.view.home.epoxy.HomeEpoxyController
 import com.tanavota.tanavota.viewmodel.home.HomeViewModel
 
 /**
  * Created by murata_sho on 2018/03/26.
  */
-class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
+class HomeFragment : BaseFragment(), HomeViewModel.Delegate, Navigator {
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
     private lateinit var controller: HomeEpoxyController
@@ -30,7 +33,7 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = HomeViewModel(this.mComponent, this)
+        viewModel = HomeViewModel(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -66,6 +69,12 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        viewModel.dispose()
+    }
+
     // region HomeViewModel.Delegate implementation
     override fun onInitialLoaded() {
         shouldInitialLoad = false
@@ -74,6 +83,11 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate {
 
     override fun onDataLoaded() {
         controller.setData(viewModel)
+    }
+
+    override fun onNavigateToDetail(id: String) {
+        val fragment = ArticleDetailFragment.newInstance(id)
+        fragmentManager?.let { navigateToFragment(it, fragment) }
     }
     // end region
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="article"
+            type="com.tanavota.tanavota.model.domain.articledetail.Article" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:background="@color/blue01"
+            android:text="@{article.article_item}"
+            tools:text="区分マンション" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="@{article.location + ' ' + article.name}"
+            tools:text="宮崎県宮崎市瀬頭２丁目の中古マンション 　Ｆ４０　フォルム宮崎駅南" />
+
+    </LinearLayout>
+
+</layout>

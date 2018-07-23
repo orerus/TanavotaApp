@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="article"
+            type="com.tanavota.tanavota.model.domain.articledetail.Article" />
+
+        <import type="com.tanavota.tanavota.R" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="@string/price" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text=":" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/orange01"
+                android:textStyle="bold"
+                android:text="@{article.price}" />
+
+            <TextView
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="@string/yield" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text=":" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/orange01"
+                android:textStyle="bold"
+                android:text="@{article.yield}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:text="@string/annual_planned_income" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:text=":" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:text="@{article.annual_planned_income}" />
+
+        </LinearLayout>
+
+        <include
+            layout="@layout/article_detail_basic_information_row"
+            captionId="@{R.string.traffic}"
+            value="@{article.traffic}" />
+
+        <include layout="@layout/gray_border" />
+
+        <include
+            layout="@layout/article_detail_basic_information_row"
+            captionId="@{R.string.location}"
+            value="@{article.location}" />
+
+        <include layout="@layout/gray_border" />
+
+        <include
+            layout="@layout/article_detail_basic_information_row"
+            captionId="@{R.string.time_old}"
+            value="@{article.time_old}" />
+
+        <include layout="@layout/gray_border" />
+
+        <include
+            layout="@layout/article_detail_basic_information_row"
+            captionId="@{R.string.building_area}"
+            value="@{article.building_area}" />
+
+        <include layout="@layout/gray_border" />
+
+        <include
+            layout="@layout/article_detail_basic_information_row"
+            captionId="@{R.string.land_area}"
+            value="@{article.land_area}" />
+
+        <include layout="@layout/gray_border" />
+
+        <include
+            layout="@layout/article_detail_basic_information_row"
+            captionId="@{R.string.building_structure}"
+            value="@{article.building_structure}" />
+
+    </LinearLayout>
+
+</layout>

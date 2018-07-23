@@ -20,4 +20,12 @@
     <color name="orange">#ffa500</color>
     <color name="lightyellow">#ffffe0</color>
     <color name="lemonchiffon">#fffacd</color>
+
+    <color name="blue01">#162b3c</color>
+    <color name="orange01">#de6300</color>
+    <color name="black_opacity30">#4D000000</color>
+    <color name="black01">#777777</color>
+    <color name="red01">#dd4b4c</color>
+    <color name="red02">#b11f20</color>
+    <color name="white_opacity30">#4DFFFFFF</color>
 </resources>

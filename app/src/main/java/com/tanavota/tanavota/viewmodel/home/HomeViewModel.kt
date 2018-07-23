@@ -2,8 +2,7 @@ package com.tanavota.tanavota.viewmodel.home
 
 import android.databinding.ObservableField
 import android.support.v7.widget.RecyclerView
-import com.tanavota.tanavota.di.component.ActivityComponent
-import com.tanavota.tanavota.di.component.DaggerApplicationComponent
+import com.tanavota.tanavota.di.ApplicationComponentStore
 import com.tanavota.tanavota.extension.exchange
 import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.model.domain.home.ArticleThumbnail
@@ -11,35 +10,42 @@ import com.tanavota.tanavota.model.domain.home.HomeModel
 import com.tanavota.tanavota.util.RecyclerViewScrollListenerDelegate
 import com.tanavota.tanavota.viewmodel.common.DataLoadingState
 import com.tanavota.tanavota.viewmodel.common.InitialLoadingState
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 
-class HomeViewModel(component: ActivityComponent, delegate: Delegate):
-        HomeModel.Delegate, HomeEpoxyModelable, DataLoadingState.Delegate {
+class HomeViewModel(delegate: Delegate) :
+        HomeModel.Delegate, HomeEpoxyModelable, DataLoadingState.Delegate, Disposable {
     interface Delegate {
         fun onInitialLoaded()
         fun onDataLoaded()
+        fun onNavigateToDetail(id: String)
     }
 
     private val wDelegate = WeakReference(delegate)
-    @Inject lateinit var model: HomeModel
+    @Inject
+    lateinit var model: HomeModel
     val initialLoadingState = ObservableField<InitialLoadingState>(InitialLoadingState.Loading)
     val loadingState = ObservableField<DataLoadingState>(DataLoadingState.Completed)
     val articleThumbnailList = mutableListOf<ArticleThumbnail>()
     val scrollListener = ScrollListener()
+    private var disposables = CompositeDisposable()
 
     init {
-        component.inject(this)
-        model.subscribe(this)
+        ApplicationComponentStore.get().activityComponent().inject(this)
+        disposables.addAll(model.subscribe(this))
     }
 
     fun load() {
+        subscribeModelIfNeeded()
         model.loadInitial()
     }
 
     fun loadNext() {
         if (model.hasNext) {
+            subscribeModelIfNeeded()
             model.loadNext()
         }
     }
@@ -67,6 +73,26 @@ class HomeViewModel(component: ActivityComponent, delegate: Delegate):
     override fun onRetry() {
         loadingState.set(DataLoadingState.Loading)
         loadNext()
+    }
+
+    override fun isDisposed(): Boolean {
+        return disposables.isDisposed
+    }
+
+    override fun dispose() {
+        model.dispose()
+        disposables.dispose()
+    }
+
+    private fun subscribeModelIfNeeded() {
+        if (disposables.isDisposed) {
+            disposables = CompositeDisposable()
+            disposables.addAll(model.subscribe(this))
+        }
+    }
+
+    fun onNavigateToDetail(id: String) {
+        wDelegate.getNullable()?.onNavigateToDetail(id)
     }
 
     // region Scroll Listener

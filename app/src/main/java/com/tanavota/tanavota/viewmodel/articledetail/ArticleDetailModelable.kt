@@ -1,0 +1,3 @@
+package com.tanavota.tanavota.viewmodel.articledetail
+
+interface ArticleDetailModelable

@@ -16,6 +16,10 @@ android {
         enabled = true
     }
 
+    androidExtensions {
+        experimental = true
+    }
+
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
@@ -94,11 +98,12 @@ dependencies {
 
     // unit test
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.8.9'
+//    testImplementation 'org.mockito:mockito-core:2.8.9'
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1'
     testImplementation 'org.powermock:powermock-api-mockito2:1.7.1'
     testImplementation 'org.powermock:powermock-module-junit4-legacy:1.7.1'
     testImplementation 'org.powermock:powermock-core:1.7.1'
-    testImplementation('org.robolectric:robolectric:3.5.1') {
+    testImplementation('org.robolectric:robolectric:3.8') {
         // conflicting 回避
         // https://github.com/google/protobuf-gradle-plugin/issues/134
         exclude group: 'com.google.protobuf', module: 'protobuf-java'
@@ -127,11 +132,20 @@ dependencies {
     }
 
     // epoxy
-    implementation 'com.airbnb.android:epoxy:2.9.0'
-    implementation 'com.airbnb.android:epoxy-databinding:2.9.0'
-    kapt 'com.airbnb.android:epoxy-processor:2.9.0'
+    implementation 'com.airbnb.android:epoxy:2.14.0'
+    implementation 'com.airbnb.android:epoxy-databinding:2.14.0'
+    kapt 'com.airbnb.android:epoxy-processor:2.14.0'
 }
 
+android.applicationVariants.all { variant ->
+    if (variant.buildType.name == "debug") {
+//        def aptTestOutputDir = new File(buildDir, "generated/source/apt/${variant.testVariant.dirName}")
+//        variant.testVariant.addJavaSourceFoldersToModel(aptTestOutputDir)
+        def aptUnitTestOutputDir = new File(buildDir, "generated/source/apt/${variant.unitTestVariant.dirName}")
+        variant.unitTestVariant.addJavaSourceFoldersToModel(aptUnitTestOutputDir)
+        assembleDebug.finalizedBy('assembleDebugUnitTest')
+    }
+}
 
 kapt {
     // for epoxy(https://github.com/airbnb/epoxy#kotlin)

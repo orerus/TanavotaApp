@@ -7,10 +7,11 @@ import com.tanavota.tanavota.extension.observeOnMainThread
 import com.tanavota.tanavota.extension.subscribeOnIOThread
 import com.tanavota.tanavota.model.repository.home.HomeRepository
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
-open class HomeModel() {
+open class HomeModel(): Disposable {
     interface Delegate {
         fun onInitialLoaded()
         fun onInitialLoadingError()
@@ -18,7 +19,7 @@ open class HomeModel() {
         fun onNextLoadingError()
     }
 
-    protected val disposables: CompositeDisposable = CompositeDisposable()
+    protected var disposables: CompositeDisposable = CompositeDisposable()
     open val initialLoadingRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
     open val initialLoadingErrorRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
     open val nextLoadingRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
@@ -39,6 +40,7 @@ open class HomeModel() {
     }
 
     open fun loadInitial() {
+        resetDisposablesIfNeeded()
         HomeRepository.instance().home()
                 .subscribeOnIOThread()
                 .observeOnMainThread()
@@ -56,6 +58,7 @@ open class HomeModel() {
     }
 
     open fun loadNext() {
+        resetDisposablesIfNeeded()
         if (hasNext) {
             HomeRepository.instance().next(page)
                     .subscribeOnIOThread()
@@ -73,6 +76,20 @@ open class HomeModel() {
                     .run { disposables.add(this) }
         } else {
             nextLoadingRelay.accept(Unit)
+        }
+    }
+
+    override fun isDisposed(): Boolean {
+        return disposables.isDisposed
+    }
+
+    override fun dispose() {
+        disposables.dispose()
+    }
+
+    private fun resetDisposablesIfNeeded() {
+        if (disposables.isDisposed) {
+            disposables = CompositeDisposable()
         }
     }
 }

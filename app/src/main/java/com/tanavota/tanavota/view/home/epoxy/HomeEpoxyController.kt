@@ -12,6 +12,7 @@ class HomeEpoxyController : TypedEpoxyController<HomeEpoxyModelable>() {
         viewModel.articleThumbnailList.forEachIndexed { index, articleThumbnail ->
             ArticleThumbnailBindingModel_()
                     .id("article_$index")
+                    .viewModel(viewModel)
                     .article(articleThumbnail)
                     .addTo(this)
         }

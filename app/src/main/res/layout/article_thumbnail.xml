@@ -2,7 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
+        <variable
+            name="viewModel"
+            type="com.tanavota.tanavota.viewmodel.home.HomeViewModel" />
+
         <variable
             name="article"
             type="com.tanavota.tanavota.model.domain.home.ArticleThumbnail" />
@@ -18,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:onClick="@{()->viewModel.onNavigateToDetail(article.id)}">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -63,7 +70,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:text="@string/price"/>
+                        android:text="@string/price" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -84,8 +91,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@color/ltgray"
-                    />
+                    android:background="@color/ltgray" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -97,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:text="@string/yield"/>
+                        android:text="@string/yield" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -119,7 +125,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="5dp"
-                android:background="@color/ltgray"/>
+                android:background="@color/ltgray" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -131,7 +137,7 @@
                 android:ellipsize="end"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:text="@{article.location}"
-                tools:text="東京都 板橋区 前野町５丁目"/>
+                tools:text="東京都 板橋区 前野町５丁目" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -143,7 +149,7 @@
                 android:ellipsize="end"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:text="@{article.buildingDetail}"
-                tools:text="ＲＣ / 2016年12月(築1年6ヶ月)"/>
+                tools:text="ＲＣ / 2016年12月(築1年6ヶ月)" />
 
             <View
                 android:layout_width="match_parent"
@@ -165,7 +171,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/ltgray"
                 android:text="@{article.siteName}"
-                tools:text="不動産情報サイト アットホーム"/>
+                tools:text="不動産情報サイト アットホーム" />
 
         </LinearLayout>
 

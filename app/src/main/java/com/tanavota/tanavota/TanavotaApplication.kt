@@ -3,6 +3,7 @@ package com.tanavota.tanavota
 import android.app.Application
 import android.util.Log
 import com.crashlytics.android.Crashlytics
+import com.tanavota.tanavota.di.ApplicationComponentStore
 import com.tanavota.tanavota.di.component.ApplicationComponent
 import com.tanavota.tanavota.di.component.DaggerApplicationComponent
 import com.tanavota.tanavota.di.module.ApplicationModule
@@ -44,6 +45,7 @@ class TanavotaApplication : Application() {
                 .applicationModule(ApplicationModule(this))
                 .build()
                 .also { it.inject(this) }
+        ApplicationComponentStore.initialize(this.component)
     }
 
     fun setComponent(component: ApplicationComponent) {
