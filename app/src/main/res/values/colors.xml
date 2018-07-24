@@ -25,7 +25,9 @@
     <color name="orange01">#de6300</color>
     <color name="black_opacity30">#4D000000</color>
     <color name="black01">#777777</color>
+    <color name="black02">#192732</color>
     <color name="red01">#dd4b4c</color>
     <color name="red02">#b11f20</color>
+    <color name="gray01">#eaeae1</color>
     <color name="white_opacity30">#4DFFFFFF</color>
 </resources>

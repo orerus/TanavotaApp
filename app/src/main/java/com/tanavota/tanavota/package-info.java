@@ -4,7 +4,8 @@
         R.layout.article_detail_title,
         R.layout.article_detail_basic_information,
         R.layout.article_detail_images,
-        R.layout.article_detail_transfer_button
+        R.layout.article_detail_transfer_button,
+        R.layout.article_detail_additional_information_row
 })
 
 package com.tanavota.tanavota;
