@@ -3,28 +3,25 @@ package com.tanavota.tanavota.model.domain.articledetail
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
 import com.tanavota.tanavota.di.ApplicationComponentStore
-import com.tanavota.tanavota.extension.exchange
 import com.tanavota.tanavota.extension.observeOnMainThread
 import com.tanavota.tanavota.extension.subscribeOnIOThread
-import com.tanavota.tanavota.model.domain.home.Home
-import com.tanavota.tanavota.model.domain.home.HomeModel
 import com.tanavota.tanavota.model.repository.articledetail.ArticleDetailRepository
-import com.tanavota.tanavota.model.repository.home.HomeRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import javax.inject.Inject
 
-class ArticleDetailModel: Disposable {
+class ArticleDetailModel : Disposable {
     interface Delegate {
         fun onInitialLoaded()
         fun onInitialLoadingError()
     }
 
     private var disposables: CompositeDisposable = CompositeDisposable()
-    @Inject lateinit var articleDetailRepository: ArticleDetailRepository
-    open val initialLoadingRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
-    open val initialLoadingErrorRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
+    @Inject
+    lateinit var articleDetailRepository: ArticleDetailRepository
+    val initialLoadingRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
+    val initialLoadingErrorRelay: Relay<Unit> = PublishRelay.create<Unit>().toSerialized()
     var article: Article = Article.empty()
     var images: List<String> = listOf()
 
@@ -32,14 +29,14 @@ class ArticleDetailModel: Disposable {
         ApplicationComponentStore.get().activityComponent().inject(this)
     }
 
-    open fun subscribe(delegate: Delegate): CompositeDisposable {
+    fun subscribe(delegate: Delegate): CompositeDisposable {
         return CompositeDisposable().apply {
             add(initialLoadingRelay.subscribe { delegate.onInitialLoaded() })
             add(initialLoadingErrorRelay.subscribe { delegate.onInitialLoadingError() })
         }
     }
 
-    open fun loadInitial(id: String) {
+    fun loadInitial(id: String) {
         resetDisposablesIfNeeded()
         articleDetailRepository.detail(id)
                 .subscribeOnIOThread()

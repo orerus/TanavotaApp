@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.tanavota.tanavota.model.domain.KeyValueStore
 import io.reactivex.Completable
+import org.json.JSONArray
+import timber.log.Timber
 
 abstract class SharedPreferenceBase<in T : Enum<*>> : KeyValueStore<T> {
     lateinit var sharedPreferences: SharedPreferences
@@ -43,6 +45,15 @@ abstract class SharedPreferenceBase<in T : Enum<*>> : KeyValueStore<T> {
         return editor.commit()
     }
 
+    override fun commitValuesSync(key: T, values: ArrayList<String>): Boolean {
+        val editor = sharedPreferences.edit()
+        val jsonArray = JSONArray().apply {
+            values.forEach { put(it) }
+        }
+        editor.putString(key.name, jsonArray.toString())
+        return editor.commit()
+    }
+
     override fun commitValue(key: T, value: Boolean): Completable {
         return Completable.create { emitter ->
             val committed = commitValueSync(key, value)
@@ -57,6 +68,17 @@ abstract class SharedPreferenceBase<in T : Enum<*>> : KeyValueStore<T> {
     override fun commitValue(key: T, value: String): Completable {
         return Completable.create { emitter ->
             val committed = commitValueSync(key, value)
+            if (committed) {
+                emitter.onComplete()
+            } else {
+                emitter.onError(PreferenceComitmentError())
+            }
+        }.retry(3)
+    }
+
+    override fun commitValues(key: T, values: ArrayList<String>): Completable {
+        return Completable.create { emitter ->
+            val committed = commitValuesSync(key, values)
             if (committed) {
                 emitter.onComplete()
             } else {
@@ -86,6 +108,21 @@ abstract class SharedPreferenceBase<in T : Enum<*>> : KeyValueStore<T> {
 
     override fun getValues(key: T): Set<String>? {
         return sharedPreferences.getStringSet(key.name, null)
+    }
+
+    override fun getValuesList(key: T): ArrayList<String>? {
+        val list = arrayListOf<String>()
+
+        sharedPreferences.getString(key.name, null)?.let {
+            try {
+                val jsonArray = JSONArray(it)
+                (0 until jsonArray.length()).forEach { list.add(jsonArray.getString(it)) }
+            } catch (ex: Throwable) {
+                Timber.e(ex)
+            }
+        } ?: return null
+
+        return list
     }
 
     override fun getValue(key: String): String? {

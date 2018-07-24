@@ -8,6 +8,7 @@ import com.tanavota.tanavota.di.component.ApplicationComponent
 import com.tanavota.tanavota.di.component.DaggerApplicationComponent
 import com.tanavota.tanavota.di.module.ApplicationModule
 import com.tanavota.tanavota.model.domain.environment.AppEnvironment
+import com.tanavota.tanavota.model.repository.local.Preference
 import io.fabric.sdk.android.Fabric
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
@@ -29,6 +30,7 @@ class TanavotaApplication : Application() {
             Timber.plant(CrashReportTree())
         }
 
+        Preference.initialize(this)
         AppEnvironment.initialize(this)
         initializeComponent()
 

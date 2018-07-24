@@ -3,23 +3,23 @@ package com.tanavota.tanavota.view.home.epoxy
 import com.airbnb.epoxy.TypedEpoxyController
 import com.tanavota.tanavota.ArticleThumbnailBindingModel_
 import com.tanavota.tanavota.HomeDataLoadingStateBindingModel_
-import com.tanavota.tanavota.viewmodel.home.HomeEpoxyModelable
-import com.tanavota.tanavota.viewmodel.home.HomeViewModel
+import com.tanavota.tanavota.viewmodel.common.ArticleThumbnailModelable
 
-class HomeEpoxyController : TypedEpoxyController<HomeEpoxyModelable>() {
-    override fun buildModels(data: HomeEpoxyModelable) {
-        val viewModel = data as HomeViewModel
-        viewModel.articleThumbnailList.forEachIndexed { index, articleThumbnail ->
+class HomeEpoxyController : TypedEpoxyController<ArticleThumbnailModelable>() {
+    override fun buildModels(data: ArticleThumbnailModelable) {
+        data.articleThumbnailList.forEachIndexed { index, articleThumbnail ->
             ArticleThumbnailBindingModel_()
                     .id("article_$index")
-                    .viewModel(viewModel)
+                    .viewModel(data)
                     .article(articleThumbnail)
                     .addTo(this)
         }
 
-        HomeDataLoadingStateBindingModel_()
-                .id("data_loading_state")
-                .viewModel(viewModel)
-                .addTo(this)
+        if (data.hasNext) {
+            HomeDataLoadingStateBindingModel_()
+                    .id("data_loading_state")
+                    .viewModel(data)
+                    .addTo(this)
+        }
     }
 }

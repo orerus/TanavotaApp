@@ -101,6 +101,49 @@ class MockRepositoriesContext : RepositoriesContext {
                         )
                 )
             }
+
+            override fun specified(ids: List<String>): Single<Home> {
+                return Single.just(
+                        Home(
+                                totalCount = 40,
+                                articleItems = listOf(
+                                        ArticleThumbnail(
+                                                id = "883480",
+                                                article_item = "マンション(一棟)",
+                                                location = "東京都杉並区光圓寺北1丁目",
+                                                building_structure = "RC造4階建て",
+                                                time_old = "1972年11月",
+                                                siteName = "不動産投資サイト「ノムコム・プロ」",
+                                                imageUrl = "https://s3-ap-northeast-1.amazonaws.com/img1.tanavota.com/883474/1.jpg",
+                                                formatPrice = "1億2,800万円",
+                                                formatYield = "7.3%"
+                                        ),
+                                        ArticleThumbnail(
+                                                id = "883481",
+                                                article_item = "マンション(一棟)",
+                                                location = "東京都調布市多摩川5丁目",
+                                                building_structure = "RC造4階建て",
+                                                time_old = "1989年5月",
+                                                siteName = "不動産投資サイト「ノムコム・プロ」",
+                                                imageUrl = "https://s3-ap-northeast-1.amazonaws.com/img1.tanavota.com/883478/1.jpg",
+                                                formatPrice = "1億5,000万円",
+                                                formatYield = "7.01%"
+                                        ),
+                                        ArticleThumbnail(
+                                                id = "883482",
+                                                article_item = "一戸建て",
+                                                location = "東京都大田区西蒲田8丁目",
+                                                building_structure = "鉄骨造4階建て",
+                                                time_old = "1989年5月",
+                                                siteName = "不動産投資サイト「ノムコム・プロ」",
+                                                imageUrl = "https://s3-ap-northeast-1.amazonaws.com/img1.tanavota.com/883479/1.jpg",
+                                                formatPrice = "1億1,500万円",
+                                                formatYield = "-"
+                                        )
+                                )
+                        )
+                )
+            }
         }
     }
 }

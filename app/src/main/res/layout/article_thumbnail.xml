@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.tanavota.tanavota.viewmodel.home.HomeViewModel" />
+            type="com.tanavota.tanavota.viewmodel.common.ArticleThumbnailModelable" />
 
         <variable
             name="article"

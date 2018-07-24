@@ -9,6 +9,8 @@ interface HomeRepository {
 
     fun next(page: Int): Single<Home>
 
+    fun specified(ids: List<String>): Single<Home>
+
     companion object {
         fun instance(): HomeRepository {
             return AppEnvironment.current().repositoriesContext.homeRepository

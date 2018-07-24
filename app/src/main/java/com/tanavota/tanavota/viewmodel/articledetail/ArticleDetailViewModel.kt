@@ -11,6 +11,7 @@ import com.tanavota.tanavota.di.ApplicationComponentStore
 import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.model.domain.articledetail.Article
 import com.tanavota.tanavota.model.domain.articledetail.ArticleDetailModel
+import com.tanavota.tanavota.model.domain.history.HistoryModel
 import com.tanavota.tanavota.view.articledetail.ArticleDetailFragment
 import com.tanavota.tanavota.viewmodel.common.InitialLoadingState
 import io.reactivex.disposables.CompositeDisposable
@@ -29,6 +30,8 @@ class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelab
     private var disposables = CompositeDisposable()
     @Inject
     lateinit var model: ArticleDetailModel
+    @Inject
+    lateinit var historyModel: HistoryModel
     val initialLoadingState = ObservableField<InitialLoadingState>(InitialLoadingState.Loading)
     var articleId: String = ""
     var article: Article = Article.empty()
@@ -55,6 +58,7 @@ class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelab
     fun load() {
         subscribeModelIfNeeded()
         model.loadInitial(articleId)
+        historyModel.push(articleId) // 結果は関知しない
     }
 
     fun createSaveInstanceState(): Bundle {

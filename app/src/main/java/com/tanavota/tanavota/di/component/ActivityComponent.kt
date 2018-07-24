@@ -8,6 +8,7 @@ import com.tanavota.tanavota.di.scope.PerActivity
 import com.tanavota.tanavota.model.domain.articledetail.ArticleDetailModel
 import com.tanavota.tanavota.view.articledetail.ArticleDetailFragment
 import com.tanavota.tanavota.viewmodel.articledetail.ArticleDetailViewModel
+import com.tanavota.tanavota.viewmodel.history.HistoryViewModel
 import com.tanavota.tanavota.viewmodel.home.HomeViewModel
 import dagger.Subcomponent
 
@@ -23,4 +24,5 @@ interface ActivityComponent {
     fun inject(fragment: ArticleDetailFragment)
     fun inject(viewModel: ArticleDetailViewModel)
     fun inject(model: ArticleDetailModel)
+    fun inject(model: HistoryViewModel)
 }

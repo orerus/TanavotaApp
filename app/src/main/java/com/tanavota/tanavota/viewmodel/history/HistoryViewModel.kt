@@ -1,10 +1,11 @@
-package com.tanavota.tanavota.viewmodel.home
+package com.tanavota.tanavota.viewmodel.history
 
 import android.databinding.ObservableField
 import android.support.v7.widget.RecyclerView
 import com.tanavota.tanavota.di.ApplicationComponentStore
 import com.tanavota.tanavota.extension.exchange
 import com.tanavota.tanavota.extension.getNullable
+import com.tanavota.tanavota.model.domain.history.HistoryModel
 import com.tanavota.tanavota.model.domain.home.ArticleThumbnail
 import com.tanavota.tanavota.model.domain.home.HomeModel
 import com.tanavota.tanavota.util.RecyclerViewScrollListenerDelegate
@@ -17,8 +18,9 @@ import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 
-class HomeViewModel(delegate: Delegate) :
-        HomeModel.Delegate, ArticleThumbnailModelable, DataLoadingState.Delegate, Disposable {
+class HistoryViewModel(delegate: Delegate) :
+        HomeModel.Delegate, HistoryModel.LoadingDelegate,
+        ArticleThumbnailModelable, DataLoadingState.Delegate, Disposable {
     interface Delegate {
         fun onInitialLoaded()
         fun onDataLoaded()
@@ -28,7 +30,10 @@ class HomeViewModel(delegate: Delegate) :
     private val wDelegate = WeakReference(delegate)
     @Inject
     lateinit var model: HomeModel
-    override val hasNext: Boolean get() = model.hasNext
+    @Inject
+    lateinit var historyModel: HistoryModel
+    override val hasNext: Boolean get() = false // ページング未実装
+    var historyIds: List<String> = listOf()
     val initialLoadingState = ObservableField<InitialLoadingState>(InitialLoadingState.Loading)
     override val loadingState = ObservableField<DataLoadingState>(DataLoadingState.Completed)
     override val articleThumbnailList = mutableListOf<ArticleThumbnail>()
@@ -38,18 +43,16 @@ class HomeViewModel(delegate: Delegate) :
     init {
         ApplicationComponentStore.get().activityComponent().inject(this)
         disposables.addAll(model.subscribe(this))
+        disposables.addAll(historyModel.subscribe(this))
     }
 
     fun load() {
         subscribeModelIfNeeded()
-        model.loadInitial()
+        historyModel.load()
     }
 
     fun loadNext() {
-        if (model.hasNext) {
-            subscribeModelIfNeeded()
-            model.loadNext()
-        }
+        // ページングは未実装
     }
 
     override fun onInitialLoaded() {
@@ -70,6 +73,11 @@ class HomeViewModel(delegate: Delegate) :
 
     override fun onNextLoadingError() {
         loadingState.set(DataLoadingState.Error)
+    }
+
+    override fun onHistoryLoaded() {
+        historyIds = historyModel.history
+        model.loadSpecified(historyIds)
     }
 
     override fun onRetry() {

@@ -9,9 +9,8 @@ import com.tanavota.tanavota.model.repository.home.HomeRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
-import java.lang.ref.WeakReference
 
-open class HomeModel(): Disposable {
+open class HomeModel() : Disposable {
     interface Delegate {
         fun onInitialLoaded()
         fun onInitialLoadingError()
@@ -77,6 +76,25 @@ open class HomeModel(): Disposable {
         } else {
             nextLoadingRelay.accept(Unit)
         }
+    }
+
+    open fun loadSpecified(ids: List<String>) {
+        resetDisposablesIfNeeded()
+        HomeRepository.instance().specified(ids)
+                .subscribeOnIOThread()
+                .observeOnMainThread()
+                .subscribe({ home: Home ->
+                    val sorted = home.articleItems.sortedByDescending { ids.indexOf(it.id) }
+                    lastLoadedArticleThumbnailList.exchange(sorted)
+                    articleThumbnailList.exchange(sorted)
+                    totalCount = home.totalCount
+                    page++
+                    initialLoadingRelay.accept(Unit)
+                }, { throwable ->
+                    Timber.e(throwable)
+                    initialLoadingErrorRelay.accept(Unit)
+                })
+                .run { disposables.add(this) }
     }
 
     override fun isDisposed(): Boolean {

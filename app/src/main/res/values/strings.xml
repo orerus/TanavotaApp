@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Tanavota</string>
 
+    <string name="action_favorite">お気に入り</string>
+    <string name="action_settings">設定</string>
+    <string name="open">オープン</string>
+    <string name="close">クローズ</string>
+
+    <string name="nav_home">ホーム</string>
+    <string name="nav_favorite">お気に入り</string>
+    <string name="nav_history">閲覧履歴</string>
+    <string name="nav_license">ライセンス</string>
+
     <string name="network_error_title">ネットワークエラー</string>
     <string name="network_error_description">時間を空けて再度アクセスしてください</string>
     <string name="retry">リトライ</string>

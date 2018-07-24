@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.tanavota.tanavota.viewmodel.home.HomeViewModel" />
+            type="com.tanavota.tanavota.viewmodel.common.ArticleThumbnailModelable" />
 
     </data>
 
@@ -49,8 +49,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/network_error_title"
-                />
+                android:text="@string/network_error_title" />
 
             <TextView
                 android:id="@+id/network_error_description"
@@ -60,8 +59,7 @@
                 android:layout_below="@id/network_error_title"
                 android:layout_marginTop="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/network_error_description"
-                />
+                android:text="@string/network_error_description" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -71,7 +69,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:text="@string/retry"
-                android:onClick="@{()->viewModel.onRetry()}"/>
+                android:onClick="@{()->viewModel.onRetry()}" />
 
         </RelativeLayout>
 

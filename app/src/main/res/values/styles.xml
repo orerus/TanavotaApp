@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Toolbar Title Color-->
+        <item name="android:textColorPrimary">@color/white</item>
+        <!-- Toolbar menu overflow icon color -->
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
 </resources>
