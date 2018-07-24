@@ -9,12 +9,16 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.LibsBuilder
+import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.Navigator
+import com.tanavota.tanavota.view.common.HeaderContents
 import com.tanavota.tanavota.view.history.HistoryFragment
 import com.tanavota.tanavota.view.home.HomeFragment
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity(), Navigator,
+class MainActivity : AppCompatActivity(), Navigator, HeaderContents,
         NavigationView.OnNavigationItemSelectedListener {
     private val toolbar: Toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
     private val navigationView: NavigationView by lazy { findViewById<NavigationView>(R.id.navigation_menu) }
@@ -44,8 +48,18 @@ class MainActivity : AppCompatActivity(), Navigator,
         navigationView.setNavigationItemSelectedListener(this)
 
         if (savedInstanceState == null) {
-            navigateToFragment(fragmentManager, HomeFragment.newInstance())
+            navigateToFragment(fragmentManager, HomeFragment.newInstance(), false)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        (getFrontFragment() as? BaseFragment)?.let { it.setTitle() }
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -58,6 +72,15 @@ class MainActivity : AppCompatActivity(), Navigator,
             }
             R.id.menu_history -> {
                 navigateToFragment(fragmentManager, HistoryFragment.newInstance())
+                drawer.closeDrawer(GravityCompat.START)
+            }
+            R.id.menu_license -> {
+                LibsBuilder()
+                        //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
+                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .withActivityTitle(getString(R.string.nav_license))
+                        //start the activity
+                        .start(this);
                 drawer.closeDrawer(GravityCompat.START)
             }
         }
@@ -99,12 +122,17 @@ class MainActivity : AppCompatActivity(), Navigator,
             else -> {
                 super.onBackPressed()
             }
-
         }
+
+        (getFrontFragment() as? BaseFragment)?.let { it.setTitle() }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         drawerToggle.syncState()
+    }
+
+    override fun setHeaderTitle(resourceId: Int) {
+        toolbar.setTitle(resourceId)
     }
 }

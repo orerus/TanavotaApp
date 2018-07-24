@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.tanavota.tanavota.R
 import com.tanavota.tanavota.databinding.FragmentArticleDetailBinding
 import com.tanavota.tanavota.di.ApplicationComponentStore
+import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.articledetail.epoxy.ArticleDetailEpoxyController
 import com.tanavota.tanavota.viewmodel.articledetail.ArticleDetailViewModel
@@ -49,6 +50,8 @@ class ArticleDetailFragment : BaseFragment(), ArticleDetailViewModel.Delegate {
         binding.viewModel = viewModel
         binding.recyclerView.adapter = controller.adapter
         this.binding = binding
+
+        setTitle()
     }
 
     override fun onResume() {
@@ -72,6 +75,10 @@ class ArticleDetailFragment : BaseFragment(), ArticleDetailViewModel.Delegate {
         super.onSaveInstanceState(outState)
         outState.putAll(viewModel.createSaveInstanceState())
         outState.putBoolean(SHOULD_INITIAL_LOAD_KEY, shouldInitialLoad)
+    }
+
+    override fun setTitle() {
+        wHeaderContents.getNullable()?.setHeaderTitle(R.string.nav_article_detail)
     }
 
     // region ArticleDetailViewModel.Delegate implementation

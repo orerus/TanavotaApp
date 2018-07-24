@@ -1,7 +1,6 @@
 package com.tanavota.tanavota.view.home
 
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -9,12 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.tanavota.tanavota.R
-import com.tanavota.tanavota.TanavotaApplication
 import com.tanavota.tanavota.databinding.FragmentHomeBinding
-import com.tanavota.tanavota.di.component.ActivityComponent
-import com.tanavota.tanavota.di.component.DaggerApplicationComponent
-import com.tanavota.tanavota.di.module.ActivityModule
-import com.tanavota.tanavota.di.module.ApplicationModule
+import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.Navigator
 import com.tanavota.tanavota.view.articledetail.ArticleDetailFragment
@@ -59,6 +54,8 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate, Navigator {
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
         this.controller = controller
         this.binding = binding
+
+        setTitle()
     }
 
     override fun onResume() {
@@ -73,6 +70,10 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate, Navigator {
         super.onPause()
 
         viewModel.dispose()
+    }
+
+    override fun setTitle() {
+        wHeaderContents.getNullable()?.setHeaderTitle(R.string.app_name)
     }
 
     // region HomeViewModel.Delegate implementation

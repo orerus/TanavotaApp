@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.tanavota.tanavota.R
 import com.tanavota.tanavota.databinding.FragmentHistoryBinding
+import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.Navigator
 import com.tanavota.tanavota.view.articledetail.ArticleDetailFragment
@@ -53,6 +54,8 @@ class HistoryFragment : BaseFragment(), HistoryViewModel.Delegate, Navigator {
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
         this.controller = controller
         this.binding = binding
+
+        setTitle()
     }
 
     override fun onResume() {
@@ -67,6 +70,10 @@ class HistoryFragment : BaseFragment(), HistoryViewModel.Delegate, Navigator {
         super.onPause()
 
         viewModel.dispose()
+    }
+
+    override fun setTitle() {
+        wHeaderContents.getNullable()?.setHeaderTitle(R.string.nav_history)
     }
 
     // region HistoryViewModel.Delegate implementation
