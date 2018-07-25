@@ -8,7 +8,7 @@ import com.tanavota.tanavota.viewmodel.articledetail.ArticleDetailViewModel
 import java.util.*
 
 class ArticleDetailEpoxyController : TypedEpoxyController<ArticleDetailModelable>() {
-    override fun buildModels(data: ArticleDetailModelable?) {
+    override fun buildModels(data: ArticleDetailModelable) {
         val viewModel = data as? ArticleDetailViewModel ?: return
         val id = viewModel.articleId
         val borderId = fun(): () -> String {

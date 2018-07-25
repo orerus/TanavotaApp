@@ -11,18 +11,25 @@ import com.tanavota.tanavota.di.ApplicationComponentStore
 import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.model.domain.articledetail.Article
 import com.tanavota.tanavota.model.domain.articledetail.ArticleDetailModel
+import com.tanavota.tanavota.model.domain.favorite.FavoriteModel
 import com.tanavota.tanavota.model.domain.history.HistoryModel
 import com.tanavota.tanavota.view.articledetail.ArticleDetailFragment
+import com.tanavota.tanavota.viewmodel.common.FavoriteButtonModel
+import com.tanavota.tanavota.viewmodel.common.FavoriteOperator
 import com.tanavota.tanavota.viewmodel.common.InitialLoadingState
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
-class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelable, Disposable {
+class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelable,
+        FavoriteModel.LoadingDelegate, FavoriteModel.OperatingDelegate,
+        FavoriteOperator, Disposable {
     interface Delegate {
         fun onInitialLoaded()
+        fun onFavoriteLoaded()
         fun onTransfer(intent: Intent)
+        fun onToast(messageId: Int)
     }
 
     private lateinit var wDelegate: WeakReference<Delegate>
@@ -32,6 +39,8 @@ class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelab
     lateinit var model: ArticleDetailModel
     @Inject
     lateinit var historyModel: HistoryModel
+    @Inject
+    lateinit var favoriteModel: FavoriteModel
     val initialLoadingState = ObservableField<InitialLoadingState>(InitialLoadingState.Loading)
     var articleId: String = ""
     var article: Article = Article.empty()
@@ -45,10 +54,12 @@ class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelab
     val rightArrowVisibility: ObservableInt = ObservableInt(View.GONE)
     val isEnableLeftArrow: Boolean get() = currentImageNumber > 1
     val isEnableRightArrow: Boolean get() = currentImageNumber < maxImageNumberString.get()?.toInt() ?: 0
+    var favoriteButton = ObservableField<FavoriteButtonModel>(FavoriteButtonModel(articleId, false))
+    var shouldLoadOnlyFavorite = false
 
     init {
         ApplicationComponentStore.get().activityComponent().inject(this)
-        disposables.addAll(model.subscribe(this))
+        subscribeModel()
     }
 
     fun setDelegate(delegate: Delegate) {
@@ -57,8 +68,13 @@ class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelab
 
     fun load() {
         subscribeModelIfNeeded()
-        model.loadInitial(articleId)
         historyModel.push(articleId) // 結果は関知しない
+        favoriteModel.load()
+    }
+
+    fun favoriteLoad() {
+        shouldLoadOnlyFavorite = true
+        favoriteModel.load()
     }
 
     fun createSaveInstanceState(): Bundle {
@@ -74,6 +90,7 @@ class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelab
             this.articleId = it.getString(ArticleDetailFragment.ARTICLE_ID_KEY)
             this.article = it.getParcelable(ArticleDetailFragment.ARTICLE_KEY)
             this.images = it.getStringArrayList(ArticleDetailFragment.IMAGES_KEY).toList()
+            this.favoriteButton.set(FavoriteButtonModel(articleId, false))
 
             initializeImages()
         }
@@ -107,6 +124,7 @@ class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelab
     override fun onInitialLoaded() {
         this.article = model.article
         this.images = model.images
+        favoriteButton.set(FavoriteButtonModel(articleId, favoriteModel.favoriteArticles.contains(articleId)))
 
         initializeImages()
 
@@ -149,5 +167,43 @@ class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelab
         val uri = Uri.parse(article.url)
         val intent = Intent(Intent.ACTION_VIEW, uri)
         wDelegate.getNullable()?.onTransfer(intent)
+    }
+
+    override fun onFavoriteLoaded() {
+        if (shouldLoadOnlyFavorite) {
+            updateFavoriteButtonStatus()
+            initialLoadingState.set(InitialLoadingState.Success)
+            wDelegate.getNullable()?.onFavoriteLoaded()
+            return
+        }
+
+        subscribeModelIfNeeded()
+        model.loadInitial(articleId)
+    }
+
+    override fun onFavoritePushed(operation: FavoriteModel.Operation) {
+        updateFavoriteButtonStatus()
+        wDelegate.getNullable()?.onToast(operation.messageId)
+    }
+
+    override fun onFavoritePushingError(error: FavoriteModel.PushingError) {
+        wDelegate.getNullable()?.onToast(error.messageId)
+    }
+
+    override fun onFavorite(id: String) {
+        subscribeModelIfNeeded()
+        favoriteModel.toggle(id)
+    }
+
+    private fun updateFavoriteButtonStatus() {
+        favoriteButton.get()?.let {
+            it.isFavorite.set(favoriteModel.favoriteArticles.contains(it.articleId))
+        }
+    }
+
+    private fun subscribeModel() {
+        disposables.addAll(model.subscribe(this))
+        disposables.addAll(favoriteModel.subscribe(this as FavoriteModel.LoadingDelegate))
+        disposables.addAll(favoriteModel.subscribe(this as FavoriteModel.OperatingDelegate))
     }
 }

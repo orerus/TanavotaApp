@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.tanavota.tanavota.R
 import com.tanavota.tanavota.databinding.FragmentArticleDetailBinding
 import com.tanavota.tanavota.di.ApplicationComponentStore
@@ -12,7 +13,6 @@ import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.articledetail.epoxy.ArticleDetailEpoxyController
 import com.tanavota.tanavota.viewmodel.articledetail.ArticleDetailViewModel
-import com.tanavota.tanavota.viewmodel.common.InitialLoadingState
 import javax.inject.Inject
 
 class ArticleDetailFragment : BaseFragment(), ArticleDetailViewModel.Delegate {
@@ -48,6 +48,8 @@ class ArticleDetailFragment : BaseFragment(), ArticleDetailViewModel.Delegate {
 
         val binding = FragmentArticleDetailBinding.bind(view)
         binding.viewModel = viewModel
+        binding.operator = viewModel
+        
         binding.recyclerView.adapter = controller.adapter
         this.binding = binding
 
@@ -60,8 +62,7 @@ class ArticleDetailFragment : BaseFragment(), ArticleDetailViewModel.Delegate {
         if (shouldInitialLoad) {
             viewModel.load()
         } else {
-            viewModel.initialLoadingState.set(InitialLoadingState.Success)
-            updateController()
+            viewModel.favoriteLoad()
         }
     }
 
@@ -81,9 +82,17 @@ class ArticleDetailFragment : BaseFragment(), ArticleDetailViewModel.Delegate {
         wHeaderContents.getNullable()?.setHeaderTitle(R.string.nav_article_detail)
     }
 
+    override fun onToast(messageId: Int) {
+        Toast.makeText(this.context, messageId, Toast.LENGTH_SHORT).show()
+    }
+
     // region ArticleDetailViewModel.Delegate implementation
     override fun onInitialLoaded() {
         shouldInitialLoad = false
+        updateController()
+    }
+
+    override fun onFavoriteLoaded() {
         updateController()
     }
 
