@@ -6,6 +6,7 @@ import com.tanavota.tanavota.di.ApplicationComponentStore
 import com.tanavota.tanavota.extension.exchange
 import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.model.domain.favorite.FavoriteModel
+import com.tanavota.tanavota.model.domain.favorite.FavoriteOperationEvent
 import com.tanavota.tanavota.model.domain.home.ArticleThumbnail
 import com.tanavota.tanavota.model.domain.home.HomeModel
 import com.tanavota.tanavota.util.RecyclerViewScrollListenerDelegate
@@ -55,6 +56,11 @@ class HomeViewModel(delegate: Delegate) :
             subscribeModelIfNeeded()
             model.loadNext()
         }
+    }
+
+    fun takeIn(event: FavoriteOperationEvent) {
+        favoriteModel.takeIn(event)
+        updateFavoriteButtonStatus()
     }
 
     override fun onInitialLoaded() {

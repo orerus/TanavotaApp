@@ -6,6 +6,7 @@ import com.tanavota.tanavota.di.ApplicationComponentStore
 import com.tanavota.tanavota.extension.exchange
 import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.model.domain.favorite.FavoriteModel
+import com.tanavota.tanavota.model.domain.favorite.FavoriteOperationEvent
 import com.tanavota.tanavota.model.domain.history.HistoryModel
 import com.tanavota.tanavota.model.domain.home.ArticleThumbnail
 import com.tanavota.tanavota.model.domain.home.HomeModel
@@ -57,6 +58,11 @@ class HistoryViewModel(delegate: Delegate) :
 
     fun loadNext() {
         // ページングは未実装
+    }
+
+    fun takeIn(event: FavoriteOperationEvent) {
+        favoriteModel.takeIn(event)
+        updateFavoriteButtonStatus()
     }
 
     private fun refreshFavoriteButtonList() {

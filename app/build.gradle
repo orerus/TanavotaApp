@@ -135,6 +135,9 @@ dependencies {
     implementation 'com.airbnb.android:epoxy:2.14.0'
     implementation 'com.airbnb.android:epoxy-databinding:2.14.0'
     kapt 'com.airbnb.android:epoxy-processor:2.14.0'
+
+    // RxEventBus
+    implementation 'com.github.kubode:rxeventbus:1.2.0'
 }
 
 android.applicationVariants.all { variant ->

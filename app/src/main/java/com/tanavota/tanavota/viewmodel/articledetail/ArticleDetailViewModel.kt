@@ -12,6 +12,7 @@ import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.model.domain.articledetail.Article
 import com.tanavota.tanavota.model.domain.articledetail.ArticleDetailModel
 import com.tanavota.tanavota.model.domain.favorite.FavoriteModel
+import com.tanavota.tanavota.model.domain.favorite.FavoriteOperationEvent
 import com.tanavota.tanavota.model.domain.history.HistoryModel
 import com.tanavota.tanavota.view.articledetail.ArticleDetailFragment
 import com.tanavota.tanavota.viewmodel.common.FavoriteButtonModel
@@ -75,6 +76,11 @@ class ArticleDetailViewModel : ArticleDetailModel.Delegate, ArticleDetailModelab
     fun favoriteLoad() {
         shouldLoadOnlyFavorite = true
         favoriteModel.load()
+    }
+
+    fun takeIn(event: FavoriteOperationEvent) {
+        favoriteModel.takeIn(event)
+        updateFavoriteButtonStatus()
     }
 
     fun createSaveInstanceState(): Bundle {

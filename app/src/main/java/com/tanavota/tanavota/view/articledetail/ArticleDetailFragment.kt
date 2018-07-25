@@ -10,6 +10,7 @@ import com.tanavota.tanavota.R
 import com.tanavota.tanavota.databinding.FragmentArticleDetailBinding
 import com.tanavota.tanavota.di.ApplicationComponentStore
 import com.tanavota.tanavota.extension.getNullable
+import com.tanavota.tanavota.model.domain.favorite.FavoriteOperationEvent
 import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.articledetail.epoxy.ArticleDetailEpoxyController
 import com.tanavota.tanavota.viewmodel.articledetail.ArticleDetailViewModel
@@ -49,7 +50,7 @@ class ArticleDetailFragment : BaseFragment(), ArticleDetailViewModel.Delegate {
         val binding = FragmentArticleDetailBinding.bind(view)
         binding.viewModel = viewModel
         binding.operator = viewModel
-        
+
         binding.recyclerView.adapter = controller.adapter
         this.binding = binding
 
@@ -84,6 +85,12 @@ class ArticleDetailFragment : BaseFragment(), ArticleDetailViewModel.Delegate {
 
     override fun onToast(messageId: Int) {
         Toast.makeText(this.context, messageId, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onFavoriteOperationEvent(event: FavoriteOperationEvent) {
+        super.onFavoriteOperationEvent(event)
+
+        viewModel.takeIn(event)
     }
 
     // region ArticleDetailViewModel.Delegate implementation

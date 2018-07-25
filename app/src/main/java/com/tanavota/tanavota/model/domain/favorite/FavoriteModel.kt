@@ -1,8 +1,10 @@
 package com.tanavota.tanavota.model.domain.favorite
 
+import com.github.kubode.rxeventbus.RxEventBus
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
 import com.tanavota.tanavota.R
+import com.tanavota.tanavota.di.ApplicationComponentStore
 import com.tanavota.tanavota.extension.observeOnMainThread
 import com.tanavota.tanavota.extension.subscribeOnIOThread
 import com.tanavota.tanavota.model.domain.environment.AppEnvironment
@@ -10,6 +12,7 @@ import com.tanavota.tanavota.model.repository.local.PreferenceKey
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
+import javax.inject.Inject
 
 class FavoriteModel : Disposable {
     enum class PushingError(val messageId: Int) {
@@ -37,6 +40,12 @@ class FavoriteModel : Disposable {
     val pushingRelay: Relay<Operation> = PublishRelay.create<Operation>().toSerialized()
     val pushingErrorRelay: Relay<PushingError> = PublishRelay.create<PushingError>().toSerialized()
     var favoriteArticles: ArrayList<String> = arrayListOf()
+    @Inject
+    lateinit var bus: RxEventBus
+
+    init {
+        ApplicationComponentStore.get().activityComponent().inject(this)
+    }
 
     fun subscribe(delegate: LoadingDelegate): CompositeDisposable {
         return CompositeDisposable().apply {
@@ -83,8 +92,10 @@ class FavoriteModel : Disposable {
                 .subscribe({
                     if (operation == Operation.Add) {
                         favoriteArticles.add(id)
+                        bus.post(FavoriteOperationEvent(listOf(id), FavoriteOperationEvent.Mode.Add))
                     } else {
                         favoriteArticles.remove(id)
+                        bus.post(FavoriteOperationEvent(listOf(id), FavoriteOperationEvent.Mode.Remove))
                     }
                     pushingRelay.accept(operation)
                 }, { throwable ->
@@ -94,6 +105,14 @@ class FavoriteModel : Disposable {
                     )
                 })
                 .run { disposables.add(this) }
+    }
+
+    fun takeIn(event: FavoriteOperationEvent) {
+        if (event.mode == FavoriteOperationEvent.Mode.Add) {
+            favoriteArticles.addAll(event.articleIds.filterNot { favoriteArticles.contains(it) })
+        } else {
+            favoriteArticles.removeAll(event.articleIds)
+        }
     }
 
     override fun isDisposed(): Boolean {
