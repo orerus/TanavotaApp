@@ -79,11 +79,15 @@ class HistoryFragment : BaseFragment(), HistoryViewModel.Delegate, Navigator {
     // region HistoryViewModel.Delegate implementation
     override fun onInitialLoaded() {
         shouldInitialLoad = false
-        controller.setData(viewModel)
+        updateController()
     }
 
     override fun onDataLoaded() {
-        controller.setData(viewModel)
+        updateController()
+    }
+
+    private fun updateController() {
+        controller.setData(viewModel, viewModel)
     }
 
     override fun onNavigateToDetail(id: String) {

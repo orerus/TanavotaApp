@@ -12,6 +12,14 @@
         <variable
             name="article"
             type="com.tanavota.tanavota.model.domain.home.ArticleThumbnail" />
+
+        <variable
+            name="favoriteViewModel"
+            type="com.tanavota.tanavota.viewmodel.common.FavoriteButtonModel" />
+
+        <variable
+            name="operator"
+            type="com.tanavota.tanavota.viewmodel.common.FavoriteOperator" />
     </data>
 
     <android.support.v7.widget.CardView
@@ -40,6 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_gravity="top|start"
                     android:paddingStart="15dp"
                     android:paddingTop="5dp"
                     android:paddingEnd="15dp"
@@ -49,6 +58,20 @@
                     android:background="@color/dkgray"
                     android:text="@{article.article_item}"
                     tools:text="中古マンション" />
+
+                <RelativeLayout
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="1dp">
+
+                    <include
+                        layout="@layout/favorite_button"
+                        viewModel="@{favoriteViewModel}"
+                        operator="@{operator}" />
+
+                </RelativeLayout>
 
             </FrameLayout>
 

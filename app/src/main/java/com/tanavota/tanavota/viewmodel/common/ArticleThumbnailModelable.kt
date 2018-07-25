@@ -7,5 +7,6 @@ interface ArticleThumbnailModelable : DataLoadingState.Delegate {
     val hasNext: Boolean
     val loadingState: ObservableField<DataLoadingState>
     val articleThumbnailList: List<ArticleThumbnail>
+    val favoriteButtonList: List<FavoriteButtonModel>
     fun onNavigateToDetail(id: String)
 }

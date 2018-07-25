@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.tanavota.tanavota.R
 import com.tanavota.tanavota.databinding.FragmentHomeBinding
 import com.tanavota.tanavota.extension.getNullable
@@ -76,14 +77,22 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate, Navigator {
         wHeaderContents.getNullable()?.setHeaderTitle(R.string.app_name)
     }
 
+    override fun onToast(messageId: Int) {
+        Toast.makeText(this.context, messageId, Toast.LENGTH_SHORT).show()
+    }
+
     // region HomeViewModel.Delegate implementation
     override fun onInitialLoaded() {
         shouldInitialLoad = false
-        controller.setData(viewModel)
+        updateController()
     }
 
     override fun onDataLoaded() {
-        controller.setData(viewModel)
+        updateController()
+    }
+
+    private fun updateController() {
+        controller.setData(viewModel, viewModel)
     }
 
     override fun onNavigateToDetail(id: String) {

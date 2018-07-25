@@ -18,4 +18,9 @@
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 
+    <style name="FavoriteButtonTheme" parent="AppTheme">
+        <item name="colorControlHighlight">@color/pink</item>
+    </style>
+
+
 </resources>

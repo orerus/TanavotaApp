@@ -9,9 +9,7 @@ import com.tanavota.tanavota.model.domain.history.HistoryModel
 import com.tanavota.tanavota.model.domain.home.ArticleThumbnail
 import com.tanavota.tanavota.model.domain.home.HomeModel
 import com.tanavota.tanavota.util.RecyclerViewScrollListenerDelegate
-import com.tanavota.tanavota.viewmodel.common.ArticleThumbnailModelable
-import com.tanavota.tanavota.viewmodel.common.DataLoadingState
-import com.tanavota.tanavota.viewmodel.common.InitialLoadingState
+import com.tanavota.tanavota.viewmodel.common.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import java.lang.ref.WeakReference
@@ -20,7 +18,15 @@ import javax.inject.Inject
 
 class HistoryViewModel(delegate: Delegate) :
         HomeModel.Delegate, HistoryModel.LoadingDelegate,
-        ArticleThumbnailModelable, DataLoadingState.Delegate, Disposable {
+        ArticleThumbnailModelable, DataLoadingState.Delegate,
+        FavoriteOperator, Disposable {
+    override fun onFavorite(id: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override val favoriteButtonList: List<FavoriteButtonModel>
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+
     interface Delegate {
         fun onInitialLoaded()
         fun onDataLoaded()

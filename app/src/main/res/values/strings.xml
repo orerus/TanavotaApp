@@ -16,6 +16,12 @@
     <string name="network_error_description">時間を空けて再度アクセスしてください</string>
     <string name="retry">リトライ</string>
 
+    <string name="complete_to_add_favorite">お気に入りに追加しました</string>
+    <string name="complete_to_remove_favorite">お気に入りから削除しました</string>
+    <string name="max_favorite_number_error">お気に入り件数が最大件数に達しています</string>
+    <string name="failed_to_add_favorite">お気に入り追加に失敗しました</string>
+    <string name="failed_to_remove_favorite">お気に入り削除に失敗しました</string>
+
     <string name="name">物件名</string>
     <string name="traffic">交通</string>
     <string name="location">所在地</string>
