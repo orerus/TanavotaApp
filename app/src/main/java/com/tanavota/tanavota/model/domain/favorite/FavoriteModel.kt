@@ -115,6 +115,24 @@ class FavoriteModel : Disposable {
         }
     }
 
+    fun remove(ids: List<String>) {
+        loadFromPreference()
+
+        val operatedIds = ids.filter { favoriteArticles.contains(it) }
+        favoriteArticles.removeAll(ids)
+
+        resetDisposablesIfNeeded()
+        AppEnvironment.current().preference.commitValues(PreferenceKey.Favorite, favoriteArticles)
+                .subscribeOnIOThread()
+                .observeOnMainThread()
+                .subscribe({
+                    bus.post(FavoriteOperationEvent(operatedIds, FavoriteOperationEvent.Mode.Remove))
+                }, { throwable ->
+                    Timber.e(throwable)
+                })
+                .run { disposables.add(this) }
+    }
+
     override fun isDisposed(): Boolean {
         return disposables.isDisposed
     }

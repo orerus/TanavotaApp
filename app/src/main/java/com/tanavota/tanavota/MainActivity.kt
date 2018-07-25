@@ -14,6 +14,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder
 import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.Navigator
 import com.tanavota.tanavota.view.common.HeaderContents
+import com.tanavota.tanavota.view.favorite.FavoriteFragment
 import com.tanavota.tanavota.view.history.HistoryFragment
 import com.tanavota.tanavota.view.home.HomeFragment
 import timber.log.Timber
@@ -68,6 +69,10 @@ class MainActivity : AppCompatActivity(), Navigator, HeaderContents,
         when (item.itemId) {
             R.id.menu_home -> {
                 navigateToFragment(fragmentManager, HomeFragment.newInstance())
+                drawer.closeDrawer(GravityCompat.START)
+            }
+            R.id.menu_favorite -> {
+                navigateToFragment(fragmentManager, FavoriteFragment.newInstance())
                 drawer.closeDrawer(GravityCompat.START)
             }
             R.id.menu_history -> {

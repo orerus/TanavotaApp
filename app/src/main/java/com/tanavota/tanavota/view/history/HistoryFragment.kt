@@ -54,6 +54,10 @@ class HistoryFragment : BaseFragment(), HistoryViewModel.Delegate, Navigator {
         binding.recyclerView.adapter = controller.adapter
         binding.recyclerView.addOnScrollListener(viewModel.scrollListener)
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
+        binding.swipeRefresh.setOnRefreshListener {
+            shouldInitialLoad = true
+            resumeAction()
+        }
         this.controller = controller
         this.binding = binding
 
@@ -63,6 +67,10 @@ class HistoryFragment : BaseFragment(), HistoryViewModel.Delegate, Navigator {
     override fun onResume() {
         super.onResume()
 
+        resumeAction()
+    }
+
+    private fun resumeAction() {
         if (shouldInitialLoad) {
             viewModel.load()
         }
@@ -92,6 +100,9 @@ class HistoryFragment : BaseFragment(), HistoryViewModel.Delegate, Navigator {
     override fun onInitialLoaded() {
         shouldInitialLoad = false
         updateController()
+        if (binding.swipeRefresh.isRefreshing) {
+            binding.swipeRefresh.isRefreshing = false
+        }
     }
 
     override fun onDataLoaded() {

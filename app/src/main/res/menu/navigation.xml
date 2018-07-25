@@ -13,7 +13,7 @@
             android:title="@string/nav_favorite" />
         <item
             android:id="@+id/menu_history"
-            android:icon="@android:drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_history_black_24dp"
             android:title="@string/nav_history" />
     </group>
     <group

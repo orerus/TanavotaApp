@@ -1,4 +1,4 @@
-package com.tanavota.tanavota.view.home
+package com.tanavota.tanavota.view.favorite
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -9,34 +9,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.tanavota.tanavota.R
-import com.tanavota.tanavota.databinding.FragmentHomeBinding
+import com.tanavota.tanavota.databinding.FragmentFavoriteBinding
 import com.tanavota.tanavota.extension.getNullable
 import com.tanavota.tanavota.model.domain.favorite.FavoriteOperationEvent
 import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.Navigator
 import com.tanavota.tanavota.view.articledetail.ArticleDetailFragment
 import com.tanavota.tanavota.view.home.epoxy.HomeEpoxyController
-import com.tanavota.tanavota.viewmodel.home.HomeViewModel
+import com.tanavota.tanavota.viewmodel.favorite.FavoriteViewModel
 
 /**
  * Created by murata_sho on 2018/03/26.
  */
-class HomeFragment : BaseFragment(), HomeViewModel.Delegate, Navigator {
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var binding: FragmentHomeBinding
+class FavoriteFragment : BaseFragment(), FavoriteViewModel.Delegate, Navigator {
+    private lateinit var viewModel: FavoriteViewModel
+    private lateinit var binding: FragmentFavoriteBinding
     private lateinit var controller: HomeEpoxyController
     private var shouldInitialLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = HomeViewModel(this)
+        viewModel = FavoriteViewModel(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_favorite, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate, Navigator {
                 ?.let { ContextCompat.getDrawable(it, R.drawable.home_divider) }
                 ?.let { dividerItemDecoration.setDrawable(it) }
 
-        val binding = FragmentHomeBinding.bind(view)
+        val binding = FragmentFavoriteBinding.bind(view)
         binding.viewModel = viewModel
         binding.recyclerView.adapter = controller.adapter
         binding.recyclerView.addOnScrollListener(viewModel.scrollListener)
@@ -83,7 +83,7 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate, Navigator {
     }
 
     override fun setTitle() {
-        wHeaderContents.getNullable()?.setHeaderTitle(R.string.app_name)
+        wHeaderContents.getNullable()?.setHeaderTitle(R.string.nav_favorite)
     }
 
     override fun onToast(messageId: Int) {
@@ -96,7 +96,7 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate, Navigator {
         viewModel.takeIn(event)
     }
 
-    // region HomeViewModel.Delegate implementation
+    // region HistoryViewModel.Delegate implementation
     override fun onInitialLoaded() {
         shouldInitialLoad = false
         updateController()
@@ -120,8 +120,8 @@ class HomeFragment : BaseFragment(), HomeViewModel.Delegate, Navigator {
     // end region
 
     companion object {
-        fun newInstance(): HomeFragment {
-            return HomeFragment()
+        fun newInstance(): FavoriteFragment {
+            return FavoriteFragment()
         }
     }
 }

@@ -10,6 +10,7 @@ import com.tanavota.tanavota.model.domain.favorite.FavoriteModel
 import com.tanavota.tanavota.view.BaseFragment
 import com.tanavota.tanavota.view.articledetail.ArticleDetailFragment
 import com.tanavota.tanavota.viewmodel.articledetail.ArticleDetailViewModel
+import com.tanavota.tanavota.viewmodel.favorite.FavoriteViewModel
 import com.tanavota.tanavota.viewmodel.history.HistoryViewModel
 import com.tanavota.tanavota.viewmodel.home.HomeViewModel
 import dagger.Subcomponent
@@ -29,4 +30,5 @@ interface ActivityComponent {
     fun inject(model: HistoryViewModel)
     fun inject(fragment: BaseFragment)
     fun inject(model: FavoriteModel)
+    fun inject(viewModel: FavoriteViewModel)
 }

@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.tanavota.tanavota.viewmodel.home.HomeViewModel" />
+            type="com.tanavota.tanavota.viewmodel.favorite.FavoriteViewModel" />
     </data>
 
     <FrameLayout

@@ -13,12 +13,19 @@
         android:layout_height="match_parent"
         android:background="@color/lemonchiffon">
 
-        <com.airbnb.epoxy.EpoxyRecyclerView
-            android:id="@+id/recycler_view"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="15dp"
-            android:clipToPadding="true" />
+            android:layout_height="wrap_content">
+
+            <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="15dp"
+                android:clipToPadding="true" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <!-- ネットワークエラー -->
         <include
