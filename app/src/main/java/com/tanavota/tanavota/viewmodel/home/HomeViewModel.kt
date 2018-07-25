@@ -42,9 +42,7 @@ class HomeViewModel(delegate: Delegate) :
 
     init {
         ApplicationComponentStore.get().activityComponent().inject(this)
-        disposables.addAll(model.subscribe(this))
-        disposables.addAll(favoriteModel.subscribe(this as FavoriteModel.LoadingDelegate))
-        disposables.addAll(favoriteModel.subscribe(this as FavoriteModel.OperatingDelegate))
+        subscribeModel()
     }
 
     fun load() {
@@ -95,6 +93,7 @@ class HomeViewModel(delegate: Delegate) :
     }
 
     override fun onFavoriteLoaded() {
+        subscribeModelIfNeeded()
         model.loadInitial()
     }
 
@@ -108,6 +107,7 @@ class HomeViewModel(delegate: Delegate) :
     }
 
     override fun onFavorite(id: String) {
+        subscribeModelIfNeeded()
         favoriteModel.toggle(id)
     }
 
@@ -128,8 +128,14 @@ class HomeViewModel(delegate: Delegate) :
     private fun subscribeModelIfNeeded() {
         if (disposables.isDisposed) {
             disposables = CompositeDisposable()
-            disposables.addAll(model.subscribe(this))
+            subscribeModel()
         }
+    }
+
+    private fun subscribeModel() {
+        disposables.addAll(model.subscribe(this))
+        disposables.addAll(favoriteModel.subscribe(this as FavoriteModel.LoadingDelegate))
+        disposables.addAll(favoriteModel.subscribe(this as FavoriteModel.OperatingDelegate))
     }
 
     override fun onNavigateToDetail(id: String) {

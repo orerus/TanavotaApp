@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.tanavota.tanavota.R
 import com.tanavota.tanavota.databinding.FragmentHistoryBinding
 import com.tanavota.tanavota.extension.getNullable
@@ -74,6 +75,10 @@ class HistoryFragment : BaseFragment(), HistoryViewModel.Delegate, Navigator {
 
     override fun setTitle() {
         wHeaderContents.getNullable()?.setHeaderTitle(R.string.nav_history)
+    }
+
+    override fun onToast(messageId: Int) {
+        Toast.makeText(this.context, messageId, Toast.LENGTH_SHORT).show()
     }
 
     // region HistoryViewModel.Delegate implementation
